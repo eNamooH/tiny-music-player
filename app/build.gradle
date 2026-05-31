@@ -10,11 +10,6 @@ android {
     targetSdkVersion 33
   }
 
-dependencies {
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'androidx.media:media:1.6.0'
-}
-
   /* just delete the signing configs if it doesn't work */
   signingConfigs {
     def keystorePropertiesFiles = rootProject.file("keystore.properties")
@@ -46,4 +41,10 @@ dependencies {
     sourceCompatibility JavaVersion.VERSION_16
     targetCompatibility JavaVersion.VERSION_16
   }
+}
+
+// ✅ ADD THIS SECTION AT THE END
+dependencies {
+  implementation 'androidx.appcompat:appcompat:1.6.1'
+  implementation 'androidx.media:media:1.6.0'
 }
