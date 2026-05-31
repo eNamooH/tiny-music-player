@@ -12,6 +12,8 @@ import android.widget.RemoteViews;
 import java.io.File;
 
 import mg.utils.notify.NotificationHelper;
+import com.martinmimigames.tinymusicplayer.liveupdate.LiveUpdateConverter;
+import com.martinmimigames.tinymusicplayer.samsung.SamsungPrefs;
 
 class Notifications {
 
@@ -30,6 +32,9 @@ class Notifications {
    */
   Notification notification;
   Notification.Builder builder;
+  
+  // ✅ ADD THIS FIELD FOR SAMSUNG CONVERTER
+  private LiveUpdateConverter liveUpdateConverter;
 
   public Notifications(Service service) {
     this.service = service;
@@ -45,6 +50,9 @@ class Notifications {
       notificationChannel.setSound(null, null);
       notificationChannel.setVibrationPattern(null);
     }
+    
+    // ✅ INITIALIZE SAMSUNG CONVERTER HERE
+    liveUpdateConverter = new LiveUpdateConverter(service);
   }
 
   /**
@@ -96,6 +104,15 @@ class Notifications {
       builder.setContentText(playbackText);
       buildNotification();
       update();
+      
+      // ✅ UPDATE SAMSUNG LIVE NOTIFICATIONS
+      if (liveUpdateConverter != null && notification != null) {
+        String title = notification.extras.getCharSequence(Notification.EXTRA_TITLE, "").toString();
+        if (title.isEmpty()) {
+          title = "Music Player";
+        }
+        liveUpdateConverter.convertNotification(notification, title, playbackText);
+      }
     }
   }
 
@@ -179,6 +196,11 @@ class Notifications {
     setupNotificationBuilder(title, playPauseIntent, killIntent, loopIntent);
     genNotification();
     setupNotification(title, killIntent);
+    
+    // ✅ CREATE SAMSUNG LIVE NOTIFICATION
+    if (liveUpdateConverter != null && notification != null) {
+      liveUpdateConverter.convertNotification(notification, title, "Now playing");
+    }
 
     update();
   }
@@ -193,5 +215,10 @@ class Notifications {
   void destroy() {
     /* remove notification from stack */
     NotificationHelper.unsend(service, NOTIFICATION_ID);
+    
+    // ✅ CANCEL SAMSUNG LIVE NOTIFICATIONS
+    if (liveUpdateConverter != null) {
+      liveUpdateConverter.disableConverter();
+    }
   }
 }
