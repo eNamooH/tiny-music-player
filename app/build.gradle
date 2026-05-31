@@ -6,7 +6,7 @@ android {
   compileSdkVersion 33
 
   defaultConfig {
-    minSdkVersion 1
+    minSdkVersion 14
     targetSdkVersion 33
   }
 
@@ -43,7 +43,6 @@ android {
   }
 }
 
-// ✅ ADD THIS SECTION AT THE END
 dependencies {
   implementation 'androidx.appcompat:appcompat:1.6.1'
   implementation 'androidx.media:media:1.6.0'
